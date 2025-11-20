@@ -1,0 +1,49 @@
+{
+  "name": "swapbuds",
+  "version": "1.0.0",
+  "private": true,
+  "description": "SWAPBUDS - Community trading platform coordination repository",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BereDarius/swapbuds.git"
+  },
+  "author": "BereDarius",
+  "scripts": {
+    "setup": "./scripts/setup.sh",
+    "dev": "concurrently -n \"backend,frontend\" -c \"blue,magenta\" \"yarn dev:backend\" \"yarn dev:frontend\"",
+    "dev:backend": "cd swapbuds-backend && yarn dev",
+    "dev:frontend": "cd swapbuds-frontend && yarn dev",
+    "build": "yarn build:backend && yarn build:frontend",
+    "build:backend": "cd swapbuds-backend && yarn build",
+    "build:frontend": "cd swapbuds-frontend && yarn build",
+    "lint": "yarn lint:backend && yarn lint:frontend",
+    "lint:backend": "cd swapbuds-backend && yarn lint",
+    "lint:frontend": "cd swapbuds-frontend && yarn lint",
+    "format": "yarn format:backend && yarn format:frontend",
+    "format:backend": "cd swapbuds-backend && yarn format",
+    "format:frontend": "cd swapbuds-frontend && yarn format",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f",
+    "docker:restart": "docker-compose restart",
+    "docker:clean": "docker-compose down -v",
+    "db:migrate": "cd swapbuds-backend && yarn prisma migrate dev",
+    "db:studio": "cd swapbuds-backend && yarn prisma studio",
+    "db:reset": "./scripts/reset-db.sh",
+    "db:seed": "cd swapbuds-backend && yarn prisma db seed",
+    "clean": "yarn clean:backend && yarn clean:frontend",
+    "clean:backend": "cd swapbuds-backend && rm -rf node_modules dist .next",
+    "clean:frontend": "cd swapbuds-frontend && rm -rf node_modules dist .next",
+    "install:all": "yarn install && cd swapbuds-backend && yarn install && cd ../swapbuds-frontend && yarn install && cd ..",
+    "update:submodules": "git submodule update --remote --merge",
+    "postinstall": "echo '✅ Root dependencies installed. Run yarn install:all to install backend and frontend dependencies.'"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "yarn": ">=1.22.0"
+  },
+  "packageManager": "yarn@1.22.21+sha1.1959a18351b811cdeedbd484a8f86c3cc3bbaf72"
+}

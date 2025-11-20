@@ -1,0 +1,53 @@
+{
+  "folders": [
+    {
+      "name": "Root",
+      "path": "."
+    },
+    {
+      "name": "Backend",
+      "path": "swapbuds-backend"
+    },
+    {
+      "name": "Frontend",
+      "path": "swapbuds-frontend"
+    }
+  ],
+  "settings": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit",
+      "source.organizeImports": "explicit"
+    },
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "files.trimTrailingWhitespace": true,
+    "files.insertFinalNewline": true,
+    "files.eol": "\n",
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "typescript.enablePromptUseWorkspaceTsdk": true,
+    "eslint.workingDirectories": ["./swapbuds-backend", "./swapbuds-frontend"],
+    "git.autofetch": true,
+    "git.confirmSync": false,
+    "terminal.integrated.defaultProfile.osx": "zsh"
+  },
+  "extensions": {
+    "recommendations": [
+      "dbaeumer.vscode-eslint",
+      "esbenp.prettier-vscode",
+      "ms-vscode.vscode-typescript-next",
+      "Prisma.prisma",
+      "bradlc.vscode-tailwindcss",
+      "eamodio.gitlens",
+      "github.vscode-pull-request-github",
+      "ms-azuretools.vscode-docker",
+      "christian-kohler.path-intellisense",
+      "visualstudioexptteam.vscodeintellicode",
+      "usernamehw.errorlens",
+      "gruntfuggly.todo-tree",
+      "humao.rest-client",
+      "yzhang.markdown-all-in-one"
+    ]
+  }
+}

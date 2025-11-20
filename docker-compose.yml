@@ -1,0 +1,66 @@
+version: "3.8"
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: swapbuds-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: swapbuds_dev
+      POSTGRES_PASSWORD: swapbuds_dev_password
+      POSTGRES_DB: swapbuds_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U swapbuds_dev"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - swapbuds-network
+
+  # Redis for Sessions & Caching
+  redis:
+    image: redis:7-alpine
+    container_name: swapbuds-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - swapbuds-network
+
+  # Adminer - Database Admin UI
+  adminer:
+    image: adminer:latest
+    container_name: swapbuds-adminer
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      ADMINER_DEFAULT_SERVER: postgres
+    depends_on:
+      - postgres
+    networks:
+      - swapbuds-network
+
+volumes:
+  postgres_data:
+    name: swapbuds-postgres-data
+  redis_data:
+    name: swapbuds-redis-data
+
+networks:
+  swapbuds-network:
+    name: swapbuds-network
+    driver: bridge

@@ -1,0 +1,163 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "🚀 Start Both Apps",
+      "type": "shell",
+      "command": "yarn",
+      "args": ["dev"],
+      "options": {
+        "cwd": "${workspaceFolder:Root}"
+      },
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": false
+      }
+    },
+    {
+      "label": "🔵 Start Backend",
+      "type": "shell",
+      "command": "yarn",
+      "args": ["dev"],
+      "options": {
+        "cwd": "${workspaceFolder:Backend}"
+      },
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "dedicated",
+        "showReuseMessage": true,
+        "clear": false
+      }
+    },
+    {
+      "label": "🟠 Start Frontend",
+      "type": "shell",
+      "command": "yarn",
+      "args": ["dev"],
+      "options": {
+        "cwd": "${workspaceFolder:Frontend}"
+      },
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "dedicated",
+        "showReuseMessage": true,
+        "clear": false
+      }
+    },
+    {
+      "label": "🐳 Docker: Start Services",
+      "type": "shell",
+      "command": "docker-compose",
+      "args": ["up", "-d"],
+      "options": {
+        "cwd": "${workspaceFolder:Root}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🐳 Docker: Stop Services",
+      "type": "shell",
+      "command": "docker-compose",
+      "args": ["down"],
+      "options": {
+        "cwd": "${workspaceFolder:Root}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🐳 Docker: View Logs",
+      "type": "shell",
+      "command": "docker-compose",
+      "args": ["logs", "-f"],
+      "options": {
+        "cwd": "${workspaceFolder:Root}"
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "🗄️ Database: Migrate",
+      "type": "shell",
+      "command": "yarn",
+      "args": ["prisma", "migrate", "dev"],
+      "options": {
+        "cwd": "${workspaceFolder:Backend}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🗄️ Database: Studio",
+      "type": "shell",
+      "command": "yarn",
+      "args": ["prisma", "studio"],
+      "options": {
+        "cwd": "${workspaceFolder:Backend}"
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "🗄️ Database: Reset",
+      "type": "shell",
+      "command": "./scripts/reset-db.sh",
+      "options": {
+        "cwd": "${workspaceFolder:Root}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🧹 Clean All",
+      "type": "shell",
+      "command": "yarn",
+      "args": ["clean"],
+      "options": {
+        "cwd": "${workspaceFolder:Root}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "📦 Install All Dependencies",
+      "type": "shell",
+      "command": "yarn",
+      "args": ["install:all"],
+      "options": {
+        "cwd": "${workspaceFolder:Root}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "🔍 Lint All",
+      "type": "shell",
+      "command": "yarn",
+      "args": ["lint"],
+      "options": {
+        "cwd": "${workspaceFolder:Root}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "✨ Format All",
+      "type": "shell",
+      "command": "yarn",
+      "args": ["format"],
+      "options": {
+        "cwd": "${workspaceFolder:Root}"
+      },
+      "problemMatcher": []
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "🔵 Backend (NestJS)",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "yarn",
+      "runtimeArgs": ["dev"],
+      "cwd": "${workspaceFolder:Backend}/",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": ["<node_internals>/**"],
+      "env": {
+        "NODE_ENV": "development"
+      }
+    },
+    {
+      "name": "🟠 Frontend (Next.js)",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "yarn",
+      "runtimeArgs": ["dev"],
+      "cwd": "${workspaceFolder:Frontend}/",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": ["<node_internals>/**"],
+      "env": {
+        "NODE_ENV": "development"
+      }
+    },
+    {
+      "name": "🚀 Full Stack (Both)",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "yarn",
+      "runtimeArgs": ["dev"],
+      "cwd": "${workspaceFolder:Root}/",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "🎯 Debug Both Apps",
+      "configurations": ["🔵 Backend (NestJS)", "🟠 Frontend (Next.js)"],
+      "stopAll": true
+    }
+  ]
+}
