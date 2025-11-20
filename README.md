@@ -23,14 +23,25 @@ A peer-to-peer item trading platform built for collectors, gamers, anime fans, a
 
 ## ✨ Features
 
+### ✅ Implemented
+
+- 🔐 **Authentication** - Secure JWT-based auth with login/register
+- 📝 **Items Management** - Full CRUD operations for trading items
+- 📸 **Image Support** - Multiple images per item (Cloudinary integration ready)
+- 🏷️ **Categories & Conditions** - Organized item classification system
+- 🔍 **Search & Filter** - Pagination and filtering capabilities
+- 👤 **User Ownership** - Items tied to user accounts with validation
+- 📱 **Responsive UI** - Modern, accessible design with shadcn/ui
+- 📊 **API Documentation** - Interactive Swagger/OpenAPI docs
+- 🐛 **Error Tracking** - Sentry integration for production monitoring
+
+### 🚧 In Progress
+
 - 🔄 **Item Trading** - Propose and manage trades with other users
-- 📸 **Image Upload** - Upload multiple images via Cloudinary
 - 💬 **Real-time Chat** - Live messaging for trade negotiations
 - 🔔 **Notifications** - Stay updated on trades and messages
-- ⭐ **Reputation System** - Build trust through successful trades
-- 🔍 **Search & Filter** - Find items by category, condition, and more
-- 👤 **User Profiles** - Showcase your collection and trading history
-- 📱 **Responsive Design** - Works seamlessly on desktop and mobile
+- ⭐ **Likes & Comments** - Engage with items in the marketplace
+- 👥 **User Profiles** - Extended profile management
 
 ---
 
@@ -38,27 +49,27 @@ A peer-to-peer item trading platform built for collectors, gamers, anime fans, a
 
 ### Backend
 
-- **NestJS** - Progressive Node.js framework
-- **Prisma** - Next-generation ORM with PostgreSQL
+- **NestJS 10** - Progressive Node.js framework
+- **Prisma 5** - Next-generation ORM with PostgreSQL
 - **Redis** - Caching and session management
 - **Winston** - Production-ready logging
-- **JWT** - Secure authentication with Passport
-- **Swagger** - API documentation
-- **TypeScript** - Type-safe development with path aliases
+- **JWT + Passport** - Secure authentication
+- **Swagger/OpenAPI** - Interactive API documentation
+- **TypeScript** - Type-safe development with `@/` path aliases
+- **Class Validator** - DTO validation with decorators
 
 ### Frontend
 
 - **Next.js 14** - React framework with App Router
 - **shadcn/ui** - Beautiful, accessible UI components
 - **TailwindCSS** - Utility-first CSS framework
-- **Zustand** - Lightweight state management
+- **Zustand** - Lightweight state management with persistence
 - **TanStack Query** - Data fetching and caching
-- **React Hook Form** - Form validation with Zod
-- **TanStack Query** - Powerful data fetching
-- **Zustand** - Lightweight state management
-- **TailwindCSS** - Utility-first CSS framework
-- **Socket.IO Client** - Real-time updates
-- **TypeScript** - Type-safe development
+- **React Hook Form** - Form validation with Zod schemas
+- **Sentry** - Error tracking and performance monitoring
+- **Axios** - HTTP client with JWT interceptors
+- **Sonner** - Toast notifications
+- **TypeScript** - Type-safe development with `@/` path aliases
 
 ### Infrastructure
 
