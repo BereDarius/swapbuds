@@ -1,0 +1,6 @@
+[submodule "swapbuds-backend"]
+	path = swapbuds-backend
+	url = https://github.com/beredarius/swapbuds-backend.git
+[submodule "swapbuds-frontend"]
+	path = swapbuds-frontend
+	url = https://github.com/beredarius/swapbuds-frontend.git
