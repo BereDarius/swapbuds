@@ -39,15 +39,21 @@ A peer-to-peer item trading platform built for collectors, gamers, anime fans, a
 ### Backend
 
 - **NestJS** - Progressive Node.js framework
-- **Prisma** - Next-generation ORM
-- **PostgreSQL** - Reliable relational database
-- **Socket.IO** - Real-time bidirectional communication
-- **JWT** - Secure authentication
-- **TypeScript** - Type-safe development
+- **Prisma** - Next-generation ORM with PostgreSQL
+- **Redis** - Caching and session management
+- **Winston** - Production-ready logging
+- **JWT** - Secure authentication with Passport
+- **Swagger** - API documentation
+- **TypeScript** - Type-safe development with path aliases
 
 ### Frontend
 
 - **Next.js 14** - React framework with App Router
+- **shadcn/ui** - Beautiful, accessible UI components
+- **TailwindCSS** - Utility-first CSS framework
+- **Zustand** - Lightweight state management
+- **TanStack Query** - Data fetching and caching
+- **React Hook Form** - Form validation with Zod
 - **TanStack Query** - Powerful data fetching
 - **Zustand** - Lightweight state management
 - **TailwindCSS** - Utility-first CSS framework
