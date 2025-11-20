@@ -30,7 +30,8 @@
     "eslint.workingDirectories": ["./swapbuds-backend", "./swapbuds-frontend"],
     "git.autofetch": true,
     "git.confirmSync": false,
-    "terminal.integrated.defaultProfile.osx": "zsh"
+    "terminal.integrated.defaultProfile.osx": "zsh",
+    "postman.settings.dotenv-detection-notification-visibility": false
   },
   "extensions": {
     "recommendations": [
