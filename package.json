@@ -11,7 +11,7 @@
   "scripts": {
     "setup": "./scripts/setup.sh",
     "dev": "concurrently -n \"backend,frontend\" -c \"blue,magenta\" \"yarn dev:backend\" \"yarn dev:frontend\"",
-    "dev:backend": "cd swapbuds-backend && yarn dev",
+    "dev:backend": "cd swapbuds-backend && yarn start:dev",
     "dev:frontend": "cd swapbuds-frontend && yarn dev",
     "build": "yarn build:backend && yarn build:frontend",
     "build:backend": "cd swapbuds-backend && yarn build",
