@@ -25,7 +25,6 @@
     "files.trimTrailingWhitespace": true,
     "files.insertFinalNewline": true,
     "files.eol": "\n",
-    "typescript.tsdk": "node_modules/typescript/lib",
     "typescript.enablePromptUseWorkspaceTsdk": true,
     "eslint.workingDirectories": ["./swapbuds-backend", "./swapbuds-frontend"],
     "git.autofetch": true,
