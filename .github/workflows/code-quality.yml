@@ -30,14 +30,10 @@ jobs:
         with:
           scan-type: "fs"
           scan-ref: "."
-          format: "sarif"
-          output: "trivy-results.sarif"
+          format: "table"
+          exit-code: "1"
+          severity: "CRITICAL,HIGH"
           skip-dirs: "swapbuds-frontend,swapbuds-backend"
-
-      - name: Upload Trivy results to GitHub Security
-        uses: github/codeql-action/upload-sarif@v4
-        with:
-          sarif_file: "trivy-results.sarif"
 
   dependency-review:
     name: Dependency Review (Root)
