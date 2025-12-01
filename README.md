@@ -387,3 +387,6 @@ yarn db:reset
   <p>Made with ❤️ by BereDarius</p>
   <p>⭐ Star this repo if you find it useful!</p>
 </div>
+
+## CI/CD Testing
+Testing all workflow automations
