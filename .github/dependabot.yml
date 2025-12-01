@@ -11,9 +11,6 @@ updates:
     commit-message:
       prefix: "chore(root)"
       include: "scope"
-    labels:
-      - "dependencies"
-      - "root"
 
   # GitHub Actions
   - package-ecosystem: "github-actions"
@@ -26,9 +23,6 @@ updates:
     commit-message:
       prefix: "chore(ci)"
       include: "scope"
-    labels:
-      - "dependencies"
-      - "ci"
 
   # Note: Backend and frontend dependencies are managed in their respective submodule repositories
   # See:
