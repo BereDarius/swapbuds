@@ -84,5 +84,10 @@
 
   // Workbench
   "workbench.editor.enablePreview": false,
-  "workbench.startupEditor": "welcomePageInEmptyWorkbench"
+  "workbench.startupEditor": "welcomePageInEmptyWorkbench",
+
+  // YAML Settings - GitHub Actions workflows
+  "yaml.schemas": {
+    "https://json.schemastore.org/github-workflow.json": ".github/workflows/*.yml"
+  }
 }
