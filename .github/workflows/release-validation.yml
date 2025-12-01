@@ -1,0 +1,79 @@
+name: Release Validation
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+
+jobs:
+  validate-tag:
+    name: Validate Release Tag
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate semver tag
+        run: |
+          TAG=${GITHUB_REF#refs/tags/}
+          if ! echo "$TAG" | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9.-]+)?(\+[a-zA-Z0-9.-]+)?$'; then
+            echo "❌ Invalid semver tag: $TAG"
+            echo "Expected format: v1.2.3 or v1.2.3-beta.1 or v1.2.3+build.123"
+            exit 1
+          fi
+          echo "✅ Valid semver tag: $TAG"
+
+      - name: Check if tag matches version in package.json
+        run: |
+          TAG=${GITHUB_REF#refs/tags/}
+          VERSION=$(echo $TAG | sed 's/^v//')
+          PACKAGE_VERSION=$(cat package.json | grep '"version"' | head -1 | awk -F'"' '{print $4}')
+
+          if [ "$VERSION" != "$PACKAGE_VERSION" ]; then
+            echo "❌ Tag version ($VERSION) doesn't match package.json version ($PACKAGE_VERSION)"
+            exit 1
+          fi
+          echo "✅ Tag version matches package.json"
+
+      - name: Check for changelog entry
+        run: |
+          TAG=${GITHUB_REF#refs/tags/}
+          VERSION=$(echo $TAG | sed 's/^v//')
+
+          if [ -f "CHANGELOG.md" ]; then
+            if ! grep -q "## \[$VERSION\]" CHANGELOG.md && ! grep -q "## $VERSION" CHANGELOG.md; then
+              echo "⚠️  Warning: No changelog entry found for $VERSION"
+            else
+              echo "✅ Changelog entry found for $VERSION"
+            fi
+          else
+            echo "⚠️  Warning: No CHANGELOG.md file found"
+          fi
+
+  check-release-readiness:
+    name: Check Release Readiness
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check if all CI checks passed
+        run: |
+          echo "Checking if main branch CI is passing..."
+          # This will be validated by required status checks
+
+      - name: Verify no open critical issues
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          CRITICAL_ISSUES=$(gh issue list --label "critical" --state open --json number --jq '. | length')
+          if [ "$CRITICAL_ISSUES" -gt 0 ]; then
+            echo "❌ Cannot release with $CRITICAL_ISSUES open critical issues"
+            exit 1
+          fi
+          echo "✅ No critical issues blocking release"

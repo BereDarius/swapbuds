@@ -1,0 +1,61 @@
+name: Commit Validation
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  validate-commits:
+    name: Validate Commit Messages
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate commit messages
+        uses: wagoid/commitlint-github-action@v6
+        with:
+          configFile: .commitlintrc.json
+          failOnWarnings: false
+          helpURL: https://www.conventionalcommits.org/
+
+  check-file-sizes:
+    name: Check File Sizes
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check for large files
+        run: |
+          echo "Checking for files larger than 5MB..."
+          large_files=$(find . -type f -size +5M -not -path "./.git/*" -not -path "./node_modules/*")
+          if [ -n "$large_files" ]; then
+            echo "❌ Large files detected (>5MB):"
+            echo "$large_files"
+            exit 1
+          fi
+          echo "✅ No large files detected"
+
+  validate-dependencies:
+    name: Validate Dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check for package-lock changes without package.json
+        run: |
+          if git diff --name-only origin/main...HEAD | grep -q "package-lock.json"; then
+            if ! git diff --name-only origin/main...HEAD | grep -q "package.json"; then
+              echo "❌ package-lock.json changed without package.json"
+              exit 1
+            fi
+          fi
+          echo "✅ Dependency files are consistent"

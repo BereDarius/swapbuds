@@ -117,85 +117,152 @@ Located in: `/Users/beredarius/Desktop/IT/fun/swapbuds/swapbuds-backend/.github/
 - **30-day retention**: Test results and reports
 - **Merged reports**: Combined view across browsers
 
-## 📝 Next Steps
+## 🔒 Branch Protection & Development Workflow
 
-### 1. Enable in GitHub (Root Repository)
+### ✅ Already Configured
 
-1. Go to https://github.com/BereDarius/swapbuds/settings/actions
-2. Enable GitHub Actions
-3. Enable "Read and write permissions" for workflows
-4. Go to Settings → Code security → Enable Dependabot
+All repositories have branch protection enabled with:
 
-### 2. Enable in Submodules
+- **Required pull requests** before merging to `main`
+- **Required status checks** (CI, linting, tests)
+- **Branch must be up to date** before merging
+- **Conversation resolution** required
+- **Auto-delete branches** after merge
 
-Do the same for both:
+### 📋 Development Workflow (REQUIRED)
 
-- https://github.com/BereDarius/swapbuds-backend/settings/actions
-- https://github.com/BereDarius/swapbuds-frontend/settings/actions
+**⚠️ IMPORTANT: Direct commits to `main` are not allowed (except for admins).**
 
-### 3. Set Up Branch Protection
+For **every** change, you must:
 
-**Root repository** (`main` branch):
+1. **Create a feature branch** following naming convention:
 
-- Require status checks: Docker Compose / validate, Code Quality / security
-- Require conversation resolution before merging
-- Require branches to be up to date
+   ```bash
+   # Choose appropriate prefix based on change type:
+   git checkout -b feat/your-feature-name
+   git checkout -b fix/bug-description
+   git checkout -b chore/task-description
+   git checkout -b docs/documentation-update
+   ```
 
-**Backend submodule** (`main` branch):
+2. **Make your changes** and commit with conventional commits:
 
-- Require status checks: CI / lint, CI / test, CI / build
-- Require conversation resolution before merging
-- Require branches to be up to date
+   ```bash
+   git add .
+   git commit -m "feat: add new feature"
+   # OR
+   git commit -m "fix: resolve login issue"
+   ```
 
-**Frontend submodule** (`main` branch):
+3. **Push your branch**:
 
-- Require status checks: CI / lint, CI / unit-test, CI / e2e-test (chromium), CI / build
-- Require conversation resolution before merging
-- Require branches to be up to date
+   ```bash
+   git push -u origin feat/your-feature-name
+   ```
 
-### 4. Optional: Set Up Codecov
+4. **Create a Pull Request**:
 
-1. Sign up at https://codecov.io with your GitHub account
-2. Add repositories: swapbuds-backend and swapbuds-frontend
-3. Add `CODECOV_TOKEN` secret to each submodule repo
+   ```bash
+   gh pr create --title "feat: add new feature" --body "Description of changes"
+   # OR use GitHub web UI
+   ```
 
-### 5. Commit and Push
+5. **Wait for CI checks** to pass (all must be green ✅)
 
-**Root repository:**
+6. **Merge the PR** once approved and checks pass:
+   ```bash
+   gh pr merge --squash --delete-branch
+   ```
+
+### 🎯 Branch Naming Convention
+
+**Required format:** `<type>/<description>`
+
+Valid types:
+
+- `feat/` or `feature/` - New features
+- `fix/` or `bugfix/` - Bug fixes
+- `hotfix/` - Urgent production fixes
+- `chore/` - Maintenance tasks
+- `docs/` - Documentation changes
+- `style/` - Code style changes
+- `refactor/` - Code refactoring
+- `perf/` - Performance improvements
+- `test/` - Test additions/changes
+- `build/` - Build system changes
+- `ci/` - CI/CD changes
+
+**Examples:**
+
+- ✅ `feat/user-authentication`
+- ✅ `fix/login-validation`
+- ✅ `chore/update-dependencies`
+- ❌ `my-feature` (no type prefix)
+- ❌ `Feature/UserAuth` (wrong case)
+
+### 📝 Commit Message Format
+
+**Required format:** `<type>(<scope>): <subject>`
+
+**Examples:**
 
 ```bash
-cd /Users/beredarius/Desktop/IT/fun/swapbuds
-git add .github/
-git commit -m "feat: add CI/CD workflows for root repository"
-git push origin main
+git commit -m "feat(auth): add JWT token refresh"
+git commit -m "fix(api): handle null values in user profile"
+git commit -m "docs(readme): update installation instructions"
+git commit -m "chore(deps): update dependencies"
 ```
 
-**Frontend submodule:**
+### 🛡️ Quality Gates (All Must Pass)
 
-```bash
-cd /Users/beredarius/Desktop/IT/fun/swapbuds/swapbuds-frontend
-git add .github/
-git commit -m "feat: add CI/CD workflows"
-git push origin main
-```
+Every PR will be automatically checked for:
 
-**Backend submodule:**
+1. **Commit Messages** - Conventional commits format
+2. **Branch Naming** - Follows convention
+3. **Code Formatting** - Prettier formatting
+4. **Linting** - ESLint/TSLint passes
+5. **Tests** - All unit/integration tests pass
+6. **Build** - Project builds successfully
+7. **Security** - Trivy security scan passes
+8. **File Sizes** - No files >5MB
+9. **Console Logs** - No debug console.log statements
+10. **Dependencies** - Lock files consistent
 
-```bash
-cd /Users/beredarius/Desktop/IT/fun/swapbuds/swapbuds-backend
-git add .github/
-git commit -m "feat: add CI/CD workflows"
-git push origin main
-```
+### 📊 Repository Status
 
-**Update root to reference new submodule commits:**
+- **Root Repository:** ✅ All workflows active
+- **Frontend Submodule:** ✅ All workflows active
+- **Backend Submodule:** ✅ All workflows active
+- **Codecov Integration:** ✅ Configured
+- **Dependabot:** ✅ Auto-merge enabled
+- **GitGuardian:** ✅ Secret scanning active
 
-```bash
-cd /Users/beredarius/Desktop/IT/fun/swapbuds
-git add swapbuds-backend swapbuds-frontend
-git commit -m "chore: update submodules with CI/CD workflows"
-git push origin main
-```
+### 🔄 Submodule Workflow
+
+When working with submodules:
+
+1. **Make changes in submodule:**
+
+   ```bash
+   cd swapbuds-backend  # or swapbuds-frontend
+   git checkout -b feat/new-feature
+   # make changes
+   git commit -m "feat: add feature"
+   git push -u origin feat/new-feature
+   gh pr create
+   # Wait for CI, merge PR
+   ```
+
+2. **Update root repository:**
+   ```bash
+   cd /Users/beredarius/Desktop/IT/fun/swapbuds
+   git checkout -b chore/update-submodule
+   git add swapbuds-backend  # or swapbuds-frontend
+   git commit -m "chore: update backend submodule"
+   git push -u origin chore/update-submodule
+   gh pr create
+   # Merge PR
+   ```
 
 ## 🎉 Result
 
