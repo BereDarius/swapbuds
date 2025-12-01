@@ -1,26 +1,36 @@
 backend:
-  - swapbuds-backend/**/*
+  - changed-files:
+      - any-glob-to-any-file: "swapbuds-backend/**/*"
 
 frontend:
-  - swapbuds-frontend/**/*
+  - changed-files:
+      - any-glob-to-any-file: "swapbuds-frontend/**/*"
 
 documentation:
-  - "**/*.md"
-  - docs/**/*
+  - changed-files:
+      - any-glob-to-any-file:
+          - "**/*.md"
+          - "docs/**/*"
 
 ci:
-  - .github/**/*
+  - changed-files:
+      - any-glob-to-any-file: ".github/**/*"
 
 database:
-  - swapbuds-backend/prisma/**/*
+  - changed-files:
+      - any-glob-to-any-file: "swapbuds-backend/prisma/**/*"
 
 tests:
-  - "**/*.spec.ts"
-  - "**/*.test.ts"
-  - "**/*.e2e.ts"
-  - swapbuds-frontend/e2e/**/*
-  - swapbuds-backend/test/**/*
+  - changed-files:
+      - any-glob-to-any-file:
+          - "**/*.spec.ts"
+          - "**/*.test.ts"
+          - "**/*.e2e.ts"
+          - "swapbuds-frontend/e2e/**/*"
+          - "swapbuds-backend/test/**/*"
 
 dependencies:
-  - "**/package.json"
-  - "**/yarn.lock"
+  - changed-files:
+      - any-glob-to-any-file:
+          - "**/package.json"
+          - "**/yarn.lock"

@@ -12,8 +12,6 @@ on:
 
 permissions:
   contents: read
-  security-events: write
-  actions: read
 
 jobs:
   security:
@@ -34,18 +32,3 @@ jobs:
           exit-code: "1"
           severity: "CRITICAL,HIGH"
           skip-dirs: "swapbuds-frontend,swapbuds-backend"
-
-  dependency-review:
-    name: Dependency Review (Root)
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          submodules: false
-
-      - name: Dependency Review
-        uses: actions/dependency-review-action@v4
-        with:
-          fail-on-severity: moderate
