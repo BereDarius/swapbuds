@@ -1,0 +1,106 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to release (e.g., 1.0.0)"
+        required: true
+
+jobs:
+  create-release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code with submodules
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: true
+
+      - name: Get version
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+          else
+            echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Get submodule versions
+        id: submodules
+        run: |
+          cd swapbuds-backend
+          BACKEND_VERSION=$(git describe --tags --always)
+          cd ../swapbuds-frontend
+          FRONTEND_VERSION=$(git describe --tags --always)
+          echo "backend=$BACKEND_VERSION" >> $GITHUB_OUTPUT
+          echo "frontend=$FRONTEND_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Generate changelog
+        id: changelog
+        run: |
+          # Get the previous tag
+          PREV_TAG=$(git describe --abbrev=0 --tags $(git rev-list --tags --skip=1 --max-count=1) 2>/dev/null || echo "")
+
+          if [ -z "$PREV_TAG" ]; then
+            # First release
+            CHANGELOG=$(git log --pretty=format:"* %s (%h)" --no-merges)
+          else
+            # Generate changelog between tags
+            CHANGELOG=$(git log $PREV_TAG..HEAD --pretty=format:"* %s (%h)" --no-merges)
+          fi
+
+          echo "changelog<<EOF" >> $GITHUB_OUTPUT
+          echo "$CHANGELOG" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ steps.version.outputs.version }}
+          release_name: Release v${{ steps.version.outputs.version }}
+          body: |
+            ## What's Changed
+
+            ${{ steps.changelog.outputs.changelog }}
+
+            ## Submodule Versions
+            - **Backend**: `${{ steps.submodules.outputs.backend }}`
+            - **Frontend**: `${{ steps.submodules.outputs.frontend }}`
+
+            ## Installation
+
+            ### Clone with submodules
+            ```bash
+            git clone --recurse-submodules https://github.com/BereDarius/swapbuds.git
+            cd swapbuds
+            git checkout v${{ steps.version.outputs.version }}
+            ```
+
+            ### Start services
+            ```bash
+            # Start infrastructure
+            docker-compose up -d
+
+            # Setup backend
+            cd swapbuds-backend
+            yarn install
+            yarn prisma migrate deploy
+            yarn start:prod
+
+            # Setup frontend
+            cd ../swapbuds-frontend
+            yarn install
+            yarn build
+            yarn start
+            ```
+          draft: false
+          prerelease: false

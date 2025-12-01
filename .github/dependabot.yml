@@ -1,0 +1,36 @@
+version: 2
+updates:
+  # Root repository dependencies
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: "chore(root)"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "root"
+
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: "chore(ci)"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "ci"
+
+  # Note: Backend and frontend dependencies are managed in their respective submodule repositories
+  # See:
+  # - https://github.com/BereDarius/swapbuds-backend
+  # - https://github.com/BereDarius/swapbuds-frontend

@@ -1,0 +1,81 @@
+name: Update Submodules
+
+on:
+  schedule:
+    # Run daily at 2 AM UTC to check for submodule updates
+    - cron: "0 2 * * *"
+  workflow_dispatch:
+    inputs:
+      submodule:
+        description: "Specific submodule to update (leave empty for all)"
+        required: false
+        type: choice
+        options:
+          - ""
+          - "swapbuds-frontend"
+          - "swapbuds-backend"
+
+jobs:
+  update:
+    name: Update Submodules
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout code with submodules
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update specific submodule
+        if: github.event.inputs.submodule != ''
+        run: |
+          git submodule update --remote ${{ github.event.inputs.submodule }}
+
+      - name: Update all submodules
+        if: github.event.inputs.submodule == ''
+        run: |
+          git submodule update --remote --merge
+
+      - name: Check for changes
+        id: changes
+        run: |
+          if [[ -n $(git status --porcelain) ]]; then
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+            echo "changed_submodules<<EOF" >> $GITHUB_OUTPUT
+            git status --porcelain | awk '{print $2}' >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          else
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create Pull Request
+        if: steps.changes.outputs.has_changes == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore: update submodules to latest versions"
+          title: "chore: Update submodules"
+          body: |
+            ## Submodule Updates
+
+            This PR updates the following submodules to their latest versions:
+
+            ${{ steps.changes.outputs.changed_submodules }}
+
+            ### Changed Submodules
+            ```
+            ${{ steps.changes.outputs.changed_submodules }}
+            ```
+
+            Please review the changes in each submodule before merging.
+
+            ---
+            *This PR was automatically created by the Update Submodules workflow*
+          branch: chore/update-submodules
+          delete-branch: true
+          labels: |
+            dependencies
+            automated

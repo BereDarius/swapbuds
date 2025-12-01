@@ -1,0 +1,26 @@
+backend:
+  - swapbuds-backend/**/*
+
+frontend:
+  - swapbuds-frontend/**/*
+
+documentation:
+  - "**/*.md"
+  - docs/**/*
+
+ci:
+  - .github/**/*
+
+database:
+  - swapbuds-backend/prisma/**/*
+
+tests:
+  - "**/*.spec.ts"
+  - "**/*.test.ts"
+  - "**/*.e2e.ts"
+  - swapbuds-frontend/e2e/**/*
+  - swapbuds-backend/test/**/*
+
+dependencies:
+  - "**/package.json"
+  - "**/yarn.lock"
