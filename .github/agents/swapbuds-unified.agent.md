@@ -195,200 +195,25 @@ src/
 
 ### Backend Development Standards
 
-**TypeScript & Architecture:**
+**Core Principles:**
 
-- Strict mode enabled
-- Decorators for controllers, services, modules
-- Dependency injection throughout
-- No circular dependencies
-- Path aliases for clean imports (@modules, @common, etc.)
+- NestJS modules: service (business logic) + controller (HTTP) + gateway (WebSocket)
+- TypeScript strict mode, decorators, dependency injection
+- Prisma ORM for database (transactions for multi-step operations)
+- DTOs with class-validator for all endpoints
+- JWT auth with role-based guards (@RequireRole, @Verified)
+- RESTful APIs with Swagger docs
+- Socket.IO for real-time (messages, notifications)
+- Jest tests with 80%+ coverage on critical paths
+- Winston logging + Sentry monitoring
 
-**Module Organization:**
+### Key Features Reference
 
-- Each feature is a self-contained module (auth, users, items, trades, etc.)
-- Service layer handles business logic
-- Controller layer handles HTTP routing
-- Gateway layer handles WebSocket (for real-time features)
-- DTO validation with class-validator
-- Guards for authentication/authorization
+**Core Features:** Auth, Users, Items, Trades, Messages, Notifications
+**Safety:** Verification (ID upload), Moderation (flags), Disputes, Support tickets
+**Admin:** User management, verification queue, moderation queue, audit logs, platform stats
 
-**Data Access:**
-
-- Prisma ORM for type-safe database queries
-- Services contain all business logic
-- Repository pattern optional (can use Prisma directly)
-- Transaction handling for multi-step operations (e.g., completing trades)
-- Query optimization with select/include for eager loading
-
-**API Design:**
-
-- RESTful endpoints with clear verbs
-- Consistent response format: `{ data: {...}, message?: string }`
-- Error responses: `{ statusCode, message, error }`
-- Proper HTTP status codes (201 for created, 204 for deleted, etc.)
-- Swagger/OpenAPI documentation on all endpoints
-
-**DTOs & Validation:**
-
-- Request validation with class-validator decorators
-- Response DTOs for controlled field exposure
-- Zod schemas as backup validation
-- Clear validation error messages
-- Pagination: `page`, `limit`, `total`, `totalPages`
-
-**Database Schema (Prisma):**
-
-- Proper indexes for frequently queried fields
-- Foreign key relationships with cascade behavior
-- Enum types for fixed values (status, roles, etc.)
-- Timestamps on all models (createdAt, updatedAt)
-- JSON fields for flexible data (metadata, settings)
-
-**Authentication & Authorization:**
-
-- JWT strategy with Passport
-- Role-based access control (RBAC)
-- Guards for protected endpoints
-- Decorators for role/permission checking
-- Account suspension/banning enforcement
-
-**Error Handling:**
-
-- Custom exception filters for consistent error responses
-- Specific HTTP status codes (400, 401, 403, 404, 422, 500)
-- Error messages in both development and production
-- Sentry integration for production monitoring
-- Logging with Winston (structured, timestamped)
-
-**Real-time Communication:**
-
-- Socket.IO gateways for WebSocket connections
-- Rooms for message isolation (trade rooms, support rooms)
-- Automatic connection management and cleanup
-- Message queuing for offline users (future enhancement)
-
-**Security:**
-
-- Input validation and sanitization
-- SQL injection prevention (via Prisma ORM)
-- Rate limiting on sensitive endpoints
-- CORS configured for specific origins
-- HTTPS enforced in production
-- Sensitive data encrypted (documents, tokens)
-- Audit logging for compliance (GDPR)
-
-**Testing & QA:**
-
-- Jest for unit tests
-- Minimum 80% code coverage for critical paths
-- Test services, controllers, guards, interceptors
-- Mock Prisma client in tests
-- Integration tests for complete workflows
-- E2E tests for critical user paths
-
-### Backend Features Implementation
-
-**Authentication:**
-
-- Register endpoint with email, password, age verification
-- Login endpoint with credential validation
-- JWT token generation and validation
-- Refresh token rotation (if implemented)
-- Logout with token invalidation
-- Current user endpoint (/auth/me)
-- Google reCAPTCHA v3 bot protection
-
-**User Management:**
-
-- User profiles with bio, location, avatar
-- User settings (preferences, delivery method)
-- Update profile/settings endpoints
-- User banning/suspension by admins
-- Get user public profile (with reputation)
-- User verification status and badges
-
-**Item Management:**
-
-- Create item with title, description, category, condition
-- Upload images (Cloudinary integration)
-- Edit item (owner only)
-- Delete item (owner only)
-- Get items feed (paginated, searchable, filterable)
-- Filter by: category, condition, delivery method, value range
-- Item detail with comments and likes
-- Soft delete for moderation
-
-**Trading System:**
-
-- Create trade proposal (select items from both users)
-- Trade detail with both items and message history
-- Accept/reject trade (responder only)
-- Complete trade (either party can mark complete)
-- Trade lifecycle tracking (PROPOSED → ACCEPTED → COMPLETED → REVIEWED)
-- Delivery method agreement during trade
-
-**Real-time Messaging:**
-
-- Send message in trade room (WebSocket)
-- Message history retrieval (HTTP)
-- Notification on new message
-- Typing indicators
-- Message read receipts (optional)
-- Support ticket chat with priority queue
-
-**Notifications:**
-
-- Create notification (system)
-- Get user notifications (paginated)
-- Mark as read / mark all as read
-- Delete notification
-- Real-time delivery via WebSocket
-- Categories: TRADE_UPDATE, MESSAGE, MENTION, SYSTEM
-
-**Verification System:**
-
-- Submit ID verification (document upload)
-- Get verification status
-- Cancel pending verification (user)
-- Admin: list pending, view details, approve/reject
-- Automatic age calculation and UNDERAGE rejection
-- Document security (encryption, temporary URLs, deletion)
-- Rate limiting (3 attempts per 30 days)
-- Audit trail for compliance
-
-**Moderation System:**
-
-- Flag content (items, comments, users, trades)
-- Flag reasons (INAPPROPRIATE, SPAM, HARASSMENT, SCAM, etc.)
-- Admin moderation queue
-- Approve/reject/remove flagged content
-- Content visibility control (public, flagged, removed)
-- Audit trail for all moderation actions
-
-**Disputes:**
-
-- Create dispute for failed trade
-- Dispute reasons (ITEM_NOT_RECEIVED, WRONG_CONDITION, etc.)
-- Admin resolution
-- Refund/compensation handling
-
-**Support Tickets:**
-
-- Create support ticket with category and priority
-- Live chat within ticket (WebSocket + HTTP)
-- Ticket status tracking (OPEN, IN_PROGRESS, WAITING, RESOLVED, CLOSED)
-- Agent assignment
-- Priority queue management
-
-**Admin Dashboard:**
-
-- Platform statistics (user count, trade count, etc.)
-- User management (list, search, ban/unban, role change)
-- Verification queue
-- Moderation queue
-- Audit logs viewer
-- Support ticket management
-- Health checks and monitoring
+_See existing modules in `src/modules/` for implementation patterns._
 
 ---
 
@@ -450,181 +275,41 @@ src/
 
 ### Frontend Development Standards
 
-**TypeScript & Types:**
+**Core Principles:**
 
-- Strict mode enabled
-- All API responses typed
-- Props interfaces for all components
-- No `any` types unless absolutely necessary
-- Extend/import types from `/types` folder
+- Next.js 14 App Router with TypeScript strict mode
+- shadcn/ui + TailwindCSS (mobile-first, responsive)
+- Zustand (global state) + React Query (server state)
+- React Hook Form + Zod for validation
+- Socket.IO for real-time updates
+- Axios with JWT interceptors
+- Jest + React Testing Library (80%+ coverage)
+- Error boundaries + toast notifications (Sonner)
+- WCAG 2.1 AA accessibility compliance
 
-**Styling & Components:**
 
-- Use shadcn/ui components as building blocks
-- TailwindCSS for styling (no inline styles)
-- CSS Modules for complex component styles (optional)
-- Responsive design (mobile-first approach)
-- Dark mode support via TailwindCSS class strategy
-
-**State Management:**
-
-- Zustand for global state (auth, notifications, WebSocket status)
-- React Query for server state (items, trades, messages)
-- Form state with React Hook Form + Zod validation
-
-**API Integration:**
-
-- Axios instances with JWT interceptors
-- TanStack Query for caching and refetching
-- Error boundaries for API failures
-- Loading and error states for all data
-- Toast notifications for user feedback (Sonner)
-
-**Real-time Features:**
-
-- Socket.IO for WebSocket connections (messages, trade updates, notifications)
-- Automatic reconnection handling
-- Presence indicators (who's online)
-- Typing indicators in chat
-
-**Forms & Validation:**
-
-- React Hook Form with Zod schemas
-- Clear validation messages
-- Disabled submit until valid
-- Loading state during submission
-- Success/error toast notifications
-
-**Testing & QA:**
-
-- Jest for unit tests
-- React Testing Library for component tests
-- Minimum 80% coverage for critical features
-- Test user interactions, edge cases, error states
-- Mock API responses in tests
-
-### Frontend Features Implementation
-
-**Authentication:**
-
-- Login/Register pages with form validation
-- JWT token management with axios interceptors
-- Protected routes with middleware
-- Session persistence in Zustand store
-- Logout with state cleanup
-- Age verification (18+ self-declaration checkbox)
-
-**Item Management:**
-
-- Item listing page with pagination and search
-- Item detail page with images, description, condition
-- Create/Edit item forms with image upload (Cloudinary)
-- Category and condition filters
-- Delivery method selection (PHYSICAL/MAIL/BOTH)
-- Estimated value display
-- Like/comment functionality
-
-**Trading System:**
-
-- Browse other users' items
-- Create trade proposals (select item to offer + item to request)
-- Trade detail page showing both items and status
-- Trade chat integration
-- Accept/reject/complete trade workflow
-- Trade review form after completion
-
-**Real-time Messaging:**
-
-- Trade-specific chat rooms
-- Live message delivery with Socket.IO
-- Message history pagination
-- Typing indicators
-- Message notifications
-- Support ticket chat with priority queue
-
-**User Profiles:**
-
-- View public user profiles
-- Edit personal profile (bio, location, avatar)
-- Verify ID documents
-- View trade history and reviews
-- Reputation score display
-- Trust badges (verified, trusted seller, etc.)
-
-**Moderation & Safety:**
-
-- Flag inappropriate items with reason selection
-- Report user profiles
-- Report comments
-- Dispute trade system
-- View moderation status
-- Admin dashboard (user management, flags, logs)
-- Support ticket creation and chat
-
-**Admin Features:**
-
-- User management (list, ban, change role)
-- Moderation queue (flagged items)
-- Verification queue (ID documents)
-- Audit logs viewer
-- Platform statistics
-- Bulk actions
-
-**Verification System:**
-
-- ID document upload form
-- Document type selection (ID Card, Passport, Driver's License)
-- Image preview before submission
-- Status tracking (PENDING, APPROVED, REJECTED, UNDERAGE)
-- Verified badge on profiles
-- Resubmit after rejection
-
-### Frontend Quality Standards
-
-- [ ] Code follows Next.js 14 App Router best practices
-- [ ] TypeScript strict mode compliance (no implicit any)
-- [ ] All components use shadcn/ui components where applicable
-- [ ] Responsive design works on mobile, tablet, desktop
-- [ ] Forms have proper validation with clear error messages
-- [ ] API errors handled with error boundaries and toast notifications
-- [ ] Loading states show spinners/skeletons
-- [ ] Accessibility: WCAG 2.1 AA compliance
-  - [ ] Keyboard navigation supported
-  - [ ] Screen reader friendly (ARIA labels)
-  - [ ] Focus indicators visible
-  - [ ] Color contrast sufficient (4.5:1 for text)
-- [ ] TailwindCSS classes optimized (no unused styles)
-- [ ] Images lazy-loaded where appropriate
-- [ ] No console errors or warnings in development
-- [ ] Jest and React Testing Library unit tests (80%+ coverage)
-- [ ] Integration tests for complex workflows (trading, messaging)
-
-### Frontend Performance Optimization
-
-- Code splitting with React.lazy() for route components
-- Image optimization (next/image component)
-- Memoization with useMemo/useCallback where needed
-- Lazy loading for list pagination
-- Minimize TailwindCSS bundle size
-- Preload critical resources
-- Monitor with Sentry for production errors
-
-### Frontend Security Considerations
-
-- Sanitize user input (React's built-in XSS protection)
-- Store JWT in httpOnly cookies (not localStorage)
-- CORS configured for specific backend domain
-- CSP headers in Next.js config
-- Rate limiting headers respected
-- Validate all user inputs with Zod schemas
-- No sensitive data in localStorage
-- External links: `target="_blank" rel="noopener noreferrer"`
 
 ---
 
 ## FULLSTACK WORKFLOW FOR FEATURES
 
 ### Feature Implementation Process
+
+**⚠️ CRITICAL: ALL CHANGES MUST GO THROUGH PULL REQUESTS**
+
+**0. Branch Creation (MANDATORY FIRST STEP)**
+
+```bash
+# ALWAYS create a feature branch before ANY changes
+git checkout main
+git pull origin main
+git checkout -b <type>/<feature-name>
+
+# Examples:
+git checkout -b feat/user-profile-editing
+git checkout -b fix/trade-status-bug
+git checkout -b chore/update-dependencies
+```
 
 **1. Requirements Analysis**
 
@@ -667,13 +352,54 @@ src/
 - Test error scenarios
 - Load test if applicable
 
-**6. Documentation & Release**
+**6. Pull Request & Code Review**
+
+```bash
+# Commit with conventional format
+git add .
+git commit -m "feat(module): description of changes"
+
+# Push feature branch
+git push -u origin <type>/<feature-name>
+
+# Create pull request
+gh pr create --title "feat: Feature Name" --body "Description of changes"
+
+# OR use GitHub web UI to create PR
+```
+
+**7. CI/CD Validation**
+
+- Wait for all CI checks to pass (all must be ✅)
+- Required checks:
+  - [ ] Code formatting (Prettier)
+  - [ ] Linting (ESLint/TSLint)
+  - [ ] Unit tests
+  - [ ] Build validation
+  - [ ] Security scan (Trivy)
+  - [ ] Branch naming validation
+  - [ ] Commit message validation
+  - [ ] No large files
+  - [ ] No console.log statements
+
+**8. Merge & Cleanup**
+
+```bash
+# After approval and CI passes, merge via GitHub UI or:
+gh pr merge --squash --delete-branch
+
+# Switch back to main and pull latest
+git checkout main
+git pull origin main
+```
+
+**9. Documentation & Release Notes**
 
 - Update API documentation
 - Create user-facing documentation
 - Update architecture docs if needed
 - Write release notes
-- Create git tags with semantic versioning
+- Create git tags with semantic versioning (if releasing)
 - Generate changelog
 
 ### Common Feature Patterns
@@ -907,6 +633,10 @@ model Flag {
 - [ ] Git commits follow conventional format (feat:, fix:, test:, etc.)
 - [ ] Commit messages reference features/bug fixes clearly
 - [ ] Code changes are atomic and well-organized
+- [ ] **MANDATORY: All changes must be made via feature branches and Pull Requests**
+- [ ] Branch names follow convention: `<type>/<description>` (e.g., `feat/user-auth`, `fix/login-bug`)
+- [ ] Pull request created with descriptive title and body
+- [ ] All CI checks pass before merging
 - [ ] Documentation updated
 - [ ] API documentation (Swagger) updated
 - [ ] Architecture changes documented
@@ -964,393 +694,12 @@ model Flag {
 - [ ] Git tags created
 - [ ] Deployed to production
 
-**Release Notes Template:**
-
-**Backend:**
-
-```markdown
-# Release vX.Y.Z - [Feature Name]
-
-**Release Date**: [Month, Year]
-**Version**: X.Y.Z
-**Release Type**: [Feature Release | Patch Release | Major Release]
-
-## 🎯 Overview
-
-[Brief 2-3 sentence description of what this release accomplishes and its main purpose]
-
-## ✨ New Features
-
-### [Feature Category 1]
-
-- **[Feature Name]**: [Description]
-- **[Feature Name]**: [Description]
-- **[Feature Name]**: [Description]
-
-### [Feature Category 2]
-
-- **[Feature Name]**: [Description]
-- **[Feature Name]**: [Description]
-
-## 🔌 API Endpoints
-
-[If applicable - can be omitted for internal refactors]
-
-### New Endpoints
-
-| Method   | Endpoint      | Description   | Authorization      |
-| -------- | ------------- | ------------- | ------------------ |
-| [METHOD] | `/api/[path]` | [Description] | [Auth requirement] |
-
-### WebSocket Events
-
-[If applicable]
-
-| Event          | Direction       | Description   |
-| -------------- | --------------- | ------------- |
-| `[event-name]` | [Client/Server] | [Description] |
-
-## 🏗️ Technical Implementation
-
-### New Modules
-
-- **[ModuleName]**: [Description of purpose]
-- **[ServiceName]**: [Description of purpose]
-- **[ControllerName]**: [Description of purpose]
-
-### Updated Modules
-
-[If applicable]
-
-- **[ModuleName]**: [What was changed/added]
-
-### Database Migrations
-
-[If applicable]
-
-**Migration: [migration_name]**
-
-```prisma
-// Key schema changes
-model [ModelName] {
-  // Important fields
-}
-```
-
-### Dependencies
-
-[If new dependencies added]
-
-- `[package-name@version]`: [Purpose]
-
-### Configuration
-
-[If new environment variables or config needed]
-
-New environment variables:
-
-- `[ENV_VAR_NAME]`: [Description]
-
-## 📝 Business Rules
-
-### [Feature/Operation Name]
-
-- ✅ [Rule or constraint]
-- ✅ [Rule or constraint]
-- ✅ [Rule or constraint]
-
-### [Another Feature/Operation]
-
-- ✅ [Rule or constraint]
-- ✅ [Rule or constraint]
-
-## 🔄 Migration Notes
-
-[Instructions for upgrading from previous version]
-
-```bash
-# Example migration commands
-[commands if needed]
-```
-
-[Or state: "No database migrations required." if applicable]
-
-## 🚀 Deployment
-
-### Prerequisites
-
-- [Prerequisite 1]
-- [Prerequisite 2]
-
-### Installation
-
-```bash
-# Pull latest code
-git pull origin main
-
-# Install dependencies (if new ones added)
-yarn install
-
-# Run migrations (if applicable)
-yarn prisma migrate deploy
-
-# Generate Prisma client (if schema changed)
-yarn prisma generate
-
-# Restart application
-yarn start:prod
-```
-
-### Environment Variables
-
-[If applicable]
-
-Add/update the following in your `.env` file:
-
-```env
-[ENV_VAR_NAME]=[example value]
-```
-
-## 🧪 Testing
-
-- **Unit Tests**: [Number] tests passing
-- **Integration Tests**: [If applicable]
-- **Test Coverage**: [If known]
-
-```bash
-# Run tests
-yarn test
-
-# Run tests with coverage
-yarn test:cov
-```
-
-## 📊 Performance Impact
-
-[If applicable - performance improvements, cache impact, etc.]
-
-- [Metric or improvement description]
-
-## 🐛 Bug Fixes
-
-[If this is a patch release or includes bug fixes]
-
-- Fixed: [Bug description]
-- Fixed: [Bug description]
-
-## ⚠️ Breaking Changes
-
-[If any - usually only for major releases]
-
-- **[Change description]**: [Migration instructions]
-
-## 📚 Documentation
-
-[Links to updated docs if applicable]
-
-- Updated: [Doc name]
-- Added: [Doc name]
-
-## 📝 Notes
-
-[Any additional notes, known issues, or future plans]
-
----
-
-**Previous Release**: [vX.Y.Z]
-**Next Release**: [Planned features or TBD]
-```
-
-**Frontend:**
-
-```markdown
-# Release vX.Y.Z - [Feature Name]
-
-**Release Date:** [Month Year]
-**Version:** X.Y.Z
-**Type:** [Feature Release | Patch Release | Major Release]
-
-## 🎯 Overview
-
-[Brief 2-3 sentence description of what this release accomplishes and its main purpose]
-
-## ✨ New Features
-
-### [Feature Category 1]
-
-- **[Feature Name]**: [Description]
-- **[Feature Name]**: [Description]
-- **[Feature Name]**: [Description]
-
-### [Feature Category 2]
-
-- **[Feature Name]**: [Description]
-- **[Feature Name]**: [Description]
-
-## 📄 Pages & Routes
-
-[If new pages/routes added]
-
-| Route     | Page       | Description   | Auth Required |
-| --------- | ---------- | ------------- | ------------- |
-| `/[path]` | [PageName] | [Description] | [Yes/No]      |
-
-## 🎨 UI Components
-
-[If new components added]
-
-### New Components
-
-- **[ComponentName]** (`path/to/component.tsx`): [Description]
-- **[ComponentName]** (`path/to/component.tsx`): [Description]
-
-### Updated Components
-
-[If applicable]
-
-- **[ComponentName]**: [What was changed/added]
-
-## 🏗️ Technical Implementation
-
-### New Features Detail
-
-#### [Feature Name]
-
-- [Implementation detail]
-- [Implementation detail]
-- [Implementation detail]
-
-### Dependencies
-
-[If new dependencies added]
-
-- `[package-name@version]`: [Purpose]
-
-### Configuration
-
-[If new environment variables or config needed]
-
-New environment variables:
-
-- `NEXT_PUBLIC_[VAR_NAME]`: [Description]
-
-## 🎨 UI/UX Rules
-
-### [Feature/Component Name]
-
-- ✅ [Rule or constraint]
-- ✅ [Rule or constraint]
-- ✅ [Rule or constraint]
-
-### [Another Feature/Component]
-
-- ✅ [Rule or constraint]
-- ✅ [Rule or constraint]
-
-## 🔄 Migration Notes
-
-[Instructions for upgrading from previous version, or state if no migration required]
-
-```bash
-# Example migration commands if needed
-[commands if needed]
-```
-
-## 🚀 Deployment
-
-### Prerequisites
-
-- [Prerequisite 1]
-- [Prerequisite 2]
-
-### Installation
-
-```bash
-# Pull latest code
-git pull origin main
-
-# Install dependencies (if new ones added)
-yarn install
-
-# Set up environment variables (if new ones added)
-cp .env.example .env.local
-# Edit new variables
-
-# Build and start
-yarn build
-yarn start
-```
-
-### Environment Variables
-
-[If new variables added]
-
-Add/update the following in your `.env.local` file:
-
-```env
-NEXT_PUBLIC_[VAR_NAME]=[example value]
-```
-
-## 🔐 Security
-
-[If applicable - security improvements or considerations]
-
-- [Security feature or consideration]
-
-## 📊 Performance Considerations
-
-[If applicable - performance improvements, optimizations, etc.]
-
-- [Performance improvement or consideration]
-
-## 🧪 Testing
-
-[If applicable]
-
-- **Test Coverage**: [If known]
-- **Manual Testing**: [What was tested]
-
-## 🐛 Bug Fixes
-
-[If this is a patch release or includes bug fixes]
-
-- Fixed: [Bug description]
-- Fixed: [Bug description]
-
-## ⚠️ Breaking Changes
-
-[If any - usually only for major releases]
-
-- **[Change description]**: [Migration instructions]
-
-## 🐛 Known Issues
-
-[Any known issues or limitations]
-
-- [Issue description]
-
-[Or state: "None reported."]
-
-## 📚 Documentation
-
-[Links to updated docs if applicable]
-
-- Updated: [Doc name]
-- Added: [Doc name]
-
-## 📅 What's Next?
-
-### Planned for vX.Y.Z
-
-- [Planned feature]
-- [Planned feature]
-- [Planned feature]
-
----
-
-**Previous Release**: vX.Y.Z
-**Next Release**: vX.Y.Z (planned)
-```
+**Release Notes:**
+
+- Use existing templates in `/releases/template.md` for backend/frontend
+- Follow semantic versioning (MAJOR.MINOR.PATCH)
+- Document breaking changes, new features, bug fixes
+- Create git tags: `git tag vX.Y.Z && git push origin vX.Y.Z`
 
 ---
 
@@ -1358,53 +707,79 @@ NEXT_PUBLIC_[VAR_NAME]=[example value]
 
 **Remember: You're building this full-time as a solo developer**
 
-1. **Tests are your safety net:**
+1. **Git Workflow is MANDATORY:**
+
+   - **NEVER commit directly to `main`** (branch protection enforced)
+   - **ALWAYS create feature branches**: `git checkout -b feat/feature-name`
+   - **ALWAYS use Pull Requests** for code review and CI validation
+   - Branch naming: `<type>/<description>` (feat/, fix/, chore/, docs/)
+   - Commit messages: Conventional format (`feat:`, `fix:`, `chore:`)
+   - Wait for ALL CI checks to pass before merging
+   - Use `gh pr merge --squash --delete-branch` after approval
+
+2. **Tests are your safety net:**
 
    - Maintain 80%+ coverage for critical features
    - Write tests as you build
    - Deploy frequently to catch issues early
    - Use Vercel Preview for staging
+   - All PRs must have passing tests
 
-2. **Automate everything possible:**
+3. **Automate everything possible:**
 
-   - Use GitHub Actions for CI/CD
+   - Use GitHub Actions for CI/CD (already configured)
    - Automated linting and formatting (Prettier, ESLint)
    - Automated testing in CI pipeline
+   - Automated branch protection and status checks
    - Environment setup scripts
 
-3. **Community Trust is paramount:**
+4. **Quality Gates (enforced on every PR):**
+
+   - Code formatting (Prettier)
+   - Linting (ESLint)
+   - Unit tests passing
+   - Build validation
+   - Security scanning (Trivy)
+   - Branch naming validation
+   - Commit message validation
+   - No files >5MB
+   - No console.log statements in production code
+   - Prisma schema validation (backend)
+
+5. **Community Trust is paramount:**
 
    - Age verification is non-negotiable
    - Moderation tools must be functional
    - Transparent policies and consistent enforcement
    - User education on trading mechanics
 
-4. **Focus on MVP at launch:**
+6. **Focus on MVP at launch:**
 
    - Core: Users, Items, Trading, Verification
    - Safety: Moderation, Reviews, Disputes
    - All else is post-launch enhancements
    - Quality > quantity
 
-5. **Performance priorities:**
+7. **Performance priorities:**
 
    - Item feed must be fast (pagination, caching)
    - Real-time chat must be responsive (<100ms latency)
    - Database queries optimized (indexes!)
    - Image optimization via Cloudinary
 
-6. **Reference existing code:**
+8. **Reference existing code:**
 
    - Check existing services for patterns (auth, users, items)
    - Review existing DTOs in each module before creating new ones
    - Use Prisma transactions for multi-step operations
    - Verify user permissions/roles before sensitive operations
 
-7. **Document complex logic:**
+9. **Document complex logic:**
    - Add inline comments to complex business logic
    - Keep architecture docs updated
    - Document API contracts clearly
    - Write clear commit messages
+   - Update release notes for each version
 
 ---
 
@@ -1435,6 +810,18 @@ NEXT_PUBLIC_[VAR_NAME]=[example value]
 
 Before marking feature complete:
 
+**Git Workflow:**
+
+- [ ] **Feature branch created** with proper naming (`<type>/<description>`)
+- [ ] **All commits follow conventional format** (feat:, fix:, chore:, etc.)
+- [ ] **Pull Request created** with descriptive title and body
+- [ ] **All CI checks pass** (formatting, linting, tests, build, security)
+- [ ] **Code reviewed** (self-review or peer review if available)
+- [ ] **PR merged via squash merge** with branch auto-deleted
+- [ ] **Main branch updated** (`git checkout main && git pull`)
+
+**Implementation:**
+
 - [ ] Frontend and backend both implemented
 - [ ] Validation on both sides (frontend for UX, backend for security)
 - [ ] Errors handled gracefully (user-friendly messages)
@@ -1448,5 +835,22 @@ Before marking feature complete:
 - [ ] Performance acceptable
 - [ ] Security reviewed (auth, validation, injection prevention)
 - [ ] Audit logging for sensitive actions
+
+**Quality Gates (CI enforced):**
+
+- [ ] Code formatted with Prettier
+- [ ] Linting passes (no errors)
+- [ ] No console.log statements in production code
+- [ ] No files >5MB
+- [ ] Branch naming convention followed
+- [ ] Commit messages validated
+- [ ] Security scan passed (Trivy)
+- [ ] Tests passed
+- [ ] Build successful
+
+**Documentation:**
+
 - [ ] Documentation updated
-- [ ] Git commits follow conventional format
+- [ ] API documentation (Swagger) updated
+- [ ] Architecture changes documented
+- [ ] Release notes prepared (if applicable)

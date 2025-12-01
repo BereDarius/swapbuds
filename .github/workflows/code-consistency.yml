@@ -1,0 +1,94 @@
+name: Code Consistency
+
+on:
+  pull_request:
+    branches: [main, develop]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  check-formatting:
+    name: Check Code Formatting
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check Prettier formatting
+        run: |
+          echo "Checking if code is properly formatted..."
+          if [ -f "package.json" ]; then
+            if grep -q '"prettier"' package.json; then
+              npx prettier --check . || {
+                echo "❌ Code is not properly formatted"
+                echo "Run 'npx prettier --write .' to fix formatting"
+                exit 1
+              }
+            fi
+          fi
+          echo "✅ Code formatting is consistent"
+
+  check-todos:
+    name: Check for TODO Comments
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check for new TODOs
+        run: |
+          echo "Checking for new TODO/FIXME comments..."
+          new_todos=$(git diff origin/main...HEAD | grep -i "^+.*\(TODO\|FIXME\|XXX\|HACK\)" | wc -l)
+
+          if [ "$new_todos" -gt 5 ]; then
+            echo "⚠️  Warning: $new_todos new TODO/FIXME comments added"
+            echo "Consider creating issues for these items"
+          elif [ "$new_todos" -gt 0 ]; then
+            echo "ℹ️  Info: $new_todos new TODO/FIXME comments added"
+          else
+            echo "✅ No new TODO/FIXME comments"
+          fi
+
+  check-console-logs:
+    name: Check for Console Logs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check for console.log statements
+        run: |
+          echo "Checking for console.log statements..."
+          console_logs=$(git diff origin/main...HEAD -- '*.ts' '*.tsx' '*.js' '*.jsx' | grep "^+.*console\.log" | wc -l)
+
+          if [ "$console_logs" -gt 0 ]; then
+            echo "⚠️  Warning: $console_logs new console.log statements found"
+            echo "Consider removing debug logs before merging"
+            git diff origin/main...HEAD -- '*.ts' '*.tsx' '*.js' '*.jsx' | grep "^+.*console\.log" | head -5
+          else
+            echo "✅ No new console.log statements"
+          fi
+
+  validate-branch-name:
+    name: Validate Branch Name
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check branch naming convention
+        run: |
+          BRANCH_NAME="${{ github.head_ref }}"
+
+          if ! echo "$BRANCH_NAME" | grep -E '^(feat|feature|fix|hotfix|bugfix|chore|docs|style|refactor|perf|test|build|ci|revert)/[a-z0-9-]+$'; then
+            echo "❌ Invalid branch name: $BRANCH_NAME"
+            echo ""
+            echo "Branch name must follow pattern: <type>/<description>"
+            echo "Valid types: feat, fix, hotfix, bugfix, chore, docs, style, refactor, perf, test, build, ci, revert"
+            echo "Example: feat/user-authentication"
+            exit 1
+          fi
+          echo "✅ Valid branch name: $BRANCH_NAME"
