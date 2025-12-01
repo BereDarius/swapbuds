@@ -39,7 +39,7 @@
     "postinstall": "echo '✅ Root dependencies installed. Run yarn install:all to install backend and frontend dependencies.'"
   },
   "devDependencies": {
-    "concurrently": "^8.2.2"
+    "concurrently": "^9.2.1"
   },
   "engines": {
     "node": ">=18.0.0",
