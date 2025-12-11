@@ -94,7 +94,7 @@ jobs:
             cd swapbuds-backend
             yarn install
             yarn prisma migrate deploy
-            yarn start:prod
+            yarn start
 
             # Setup frontend
             cd ../swapbuds-frontend

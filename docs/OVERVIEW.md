@@ -16,8 +16,8 @@ A peer-to-peer item trading platform built for collectors, gamers, anime fans, a
 - [Tech Stack](#-tech-stack)
 - [Project Structure](#-project-structure)
 - [Quick Start](#-quick-start)
-- [Documentation](#-documentation)
 - [Development](#-development)
+- [Documentation](#-documentation)
 
 ---
 
@@ -175,58 +175,8 @@ swapbuds/                       # 📦 Coordination Repo (this repo)
 
 5. **Open in Browser**
    - Frontend: http://localhost:3000
-   - Backend API: http://localhost:3001
-   - API Docs: http://localhost:3001/api/docs
+   - Backend: http://localhost:3001
    - Adminer: http://localhost:8080
-
-**For detailed setup instructions, see [Quick Start Guide](./docs/QUICK_START.md)**
-
----
-
-## 📚 Documentation
-
-### 📖 Complete Documentation Hub
-
-**All documentation is centralized in [`docs/`](./docs/README.md)**
-
-#### Quick Navigation
-
-- **[Quick Start Guide](./docs/QUICK_START.md)** - Get running in 5 minutes
-- **[Architecture Overview](./docs/ARCHITECTURE.md)** - System design
-- **[API Reference](./docs/api/API_REFERENCE.md)** - Complete API docs
-
-#### Documentation by Category
-
-**🛠️ Development**
-
-- [Setup Guide](./docs/development/SETUP.md)
-- [Testing](./docs/development/TESTING.md)
-- [CI/CD](./docs/development/CI_CD.md)
-
-**🔌 API & Backend**
-
-- [Backend Architecture](./docs/api/BACKEND_ARCHITECTURE.md)
-- [Authentication](./docs/api/AUTH.md)
-- [Database Schema](./docs/api/DATABASE.md)
-
-**🎨 Frontend**
-
-- [Frontend Architecture](./docs/frontend/ARCHITECTURE.md)
-- [UI Components](./docs/frontend/COMPONENTS.md)
-- [Performance](./docs/frontend/PERFORMANCE.md)
-
-**⚡ Features**
-
-- [Trading System](./docs/features/TRADES.md)
-- [Messaging](./docs/features/MESSAGES.md)
-- [Social Features](./docs/features/SOCIAL.md)
-- [All Features →](./docs/features/)
-
-**🔒 Security & Operations**
-
-- [Security Guide](./docs/security/SECURITY.md)
-- [Deployment](./docs/operations/DEPLOYMENT.md)
-- [Monitoring](./docs/operations/MONITORING.md)
 
 ---
 
